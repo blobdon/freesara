@@ -47,11 +47,12 @@ var groups = []group{
 	group{title: "IslingtonSouthUK"},
 }
 var tpl = template.Must(template.ParseFiles("tpl/index.html"))
-var fcUser, fcPass string
+var fcUser, fcPass, port string
 
 func init() {
 	fcUser = os.Getenv("FC_USER")
 	fcPass = os.Getenv("FC_PASS")
+	port = os.Getenv("PORT")
 	for i := range groups {
 		groups[i].prepURL("25")
 	}
@@ -185,5 +186,5 @@ func main() {
 	http.HandleFunc("/", handler)
 	http.Handle("/tpl/", http.FileServer(http.Dir("./")))
 
-	http.ListenAndServe(":8080", nil)
+	http.ListenAndServe(port, nil)
 }
