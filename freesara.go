@@ -186,5 +186,5 @@ func main() {
 	http.HandleFunc("/", handler)
 	http.Handle("/tpl/", http.FileServer(http.Dir("./")))
 
-	http.ListenAndServe(port, nil)
+	http.ListenAndServe(":"+port, nil)
 }
