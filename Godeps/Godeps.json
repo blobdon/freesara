@@ -1,3 +1,4 @@
 {
+	"ImportPath": "github.com/blobdon/freesara",
 	"GoVersion": "go1.6",
 }
