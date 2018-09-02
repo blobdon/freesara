@@ -53,7 +53,7 @@ var fcUser, fcPass string
 func init() {
 	fcUser = os.Getenv("FC_USER")
 	fcPass = os.Getenv("FC_PASS")
-	// port = os.Getenv("PORT") // uncomment for Heroku
+	port = os.Getenv("PORT") // uncomment for Heroku
 	for i := range groups {
 		groups[i].prepURL("25")
 	}
@@ -187,6 +187,6 @@ func main() {
 	http.HandleFunc("/", handler)
 	http.Handle("/tpl/", http.FileServer(http.Dir("./")))
 
-	// http.ListenAndServe(":"+port, nil) // for Heroku
-	http.ListenAndServe(":8080", nil) // for others
+	http.ListenAndServe(":"+port, nil) // for Heroku
+	// http.ListenAndServe(":8080", nil) // for others
 }
