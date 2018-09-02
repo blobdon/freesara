@@ -37,22 +37,23 @@ type group struct {
 var offers []offer
 var wg sync.WaitGroup
 var groups = []group{
-	group{title: "IslingtonEastUK"},
 	group{title: "GreenwichUK"},
-	group{title: "HackneyUK"},
-	group{title: "NewhamUK"},
-	group{title: "CamdenSouthUK"},
 	group{title: "CityOfLondon"},
 	group{title: "TowerHamletsUK"},
-	group{title: "IslingtonSouthUK"},
+	group{title: "LewishamUK"},
+	group{title: "SouthwarkUK"},
 }
 var tpl = template.Must(template.ParseFiles("tpl/index.html"))
-var fcUser, fcPass, port string
+
+// for use with Heroku
+// var fcUser, fcPass, port string
+// for others
+var fcUser, fcPass string
 
 func init() {
 	fcUser = os.Getenv("FC_USER")
 	fcPass = os.Getenv("FC_PASS")
-	port = os.Getenv("PORT")
+	// port = os.Getenv("PORT") // uncomment for Heroku
 	for i := range groups {
 		groups[i].prepURL("25")
 	}
@@ -186,5 +187,6 @@ func main() {
 	http.HandleFunc("/", handler)
 	http.Handle("/tpl/", http.FileServer(http.Dir("./")))
 
-	http.ListenAndServe(":"+port, nil)
+	// http.ListenAndServe(":"+port, nil) // for Heroku
+	http.ListenAndServe(":8080", nil) // for others
 }
