@@ -46,9 +46,10 @@ var groups = []group{
 var tpl = template.Must(template.ParseFiles("tpl/index.html"))
 
 // for use with Heroku
-// var fcUser, fcPass, port string
-// for others
-var fcUser, fcPass string
+var fcUser, fcPass, port string
+
+// for use with others
+// var fcUser, fcPass string
 
 func init() {
 	fcUser = os.Getenv("FC_USER")
