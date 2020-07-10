@@ -1,8 +1,11 @@
 package main
 
 import (
+	"crypto/tls"
+	"crypto/x509"
 	"fmt"
 	"html/template"
+	"io/ioutil"
 	"log"
 	"net/http"
 	"net/http/cookiejar"
@@ -149,9 +152,34 @@ func handler(w http.ResponseWriter, r *http.Request) {
 	offers = nil
 	jar, err := cookiejar.New(&cookiejar.Options{PublicSuffixList: publicsuffix.List})
 	check(err)
+	// On OSx and Heroku, freecycle's certficate chain is not recognized as valid
+	// Instead of relying on the system cert pool, we can just include our own
+	// copy of the CA certs we need for this application.
+	// It is possible to append them to the system cert pool, but there is no
+	// reason to do so, unless it was an easy default that met our needs.
+
+	// Read in file containing the chain of certificates we want to trust
+	certsFile := "freecycle-org-chain.pem"
+	certs, err := ioutil.ReadFile(certsFile)
+	if err != nil {
+		log.Fatalf("failed to read freecycle certificate chain file %q: %v", certsFile, err)
+	}
+
+	// Add those certificates to an empty certificate pool.
+	certPool := x509.NewCertPool()
+	if ok := certPool.AppendCertsFromPEM(certs); !ok {
+		log.Fatalln("failed to append freecycle certs to trusted cert pool")
+
+	}
+
+	// Configure the HTTP client to trust that cert pool.
 	client := &http.Client{
+		Transport: &http.Transport{
+			TLSClientConfig: &tls.Config{RootCAs: certPool},
+		},
 		Jar: jar,
 	}
+
 	fmt.Println("getting cookies")
 	// get cookies from login page
 	_, err = client.Get("https://my.freecycle.org")
