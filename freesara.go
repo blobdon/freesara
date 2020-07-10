@@ -37,11 +37,11 @@ type group struct {
 var offers []offer
 var wg sync.WaitGroup
 var groups = []group{
-	group{title: "GreenwichUK"},
-	group{title: "CityOfLondon"},
-	group{title: "TowerHamletsUK"},
-	group{title: "LewishamUK"},
-	group{title: "SouthwarkUK"},
+	{title: "GreenwichUK"},
+	{title: "CityOfLondon"},
+	{title: "TowerHamletsUK"},
+	{title: "LewishamUK"},
+	{title: "SouthwarkUK"},
 }
 var tpl = template.Must(template.ParseFiles("tpl/index.html"))
 
